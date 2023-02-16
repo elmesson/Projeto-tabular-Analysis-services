@@ -1,0 +1,433 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1500,
+  "model": {
+    "culture": "pt-BR",
+    "dataSources": [
+      {
+        "type": "structured",
+        "name": "MySql/localhost:3306;base_de_dados",
+        "connectionDetails": {
+          "protocol": "mysql",
+          "address": {
+            "server": "localhost:3306",
+            "database": "base_de_dados"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "options": {
+          "returnSingleDatabase": true
+        },
+        "credential": {
+          "AuthenticationKind": "UsernamePassword",
+          "Username": "root",
+          "EncryptConnection": true
+        }
+      }
+    ],
+    "tables": [
+      {
+        "name": "base_de_dados first_name",
+        "columns": [
+          {
+            "name": "first_name",
+            "dataType": "string",
+            "sourceColumn": "first_name"
+          },
+          {
+            "name": "id",
+            "dataType": "int64",
+            "sourceColumn": "id"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"MySql/localhost:3306;base_de_dados\",",
+                "    base_de_dados_first_name = Source{[Schema=\"base_de_dados\",Item=\"first_name\"]}[Data]",
+                "in",
+                "    base_de_dados_first_name"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "base_de_dados profiles",
+        "columns": [
+          {
+            "name": "id",
+            "dataType": "int64",
+            "sourceColumn": "id"
+          },
+          {
+            "name": "bio",
+            "dataType": "string",
+            "sourceColumn": "bio"
+          },
+          {
+            "name": "description",
+            "dataType": "string",
+            "sourceColumn": "description"
+          },
+          {
+            "name": "user_id",
+            "dataType": "int64",
+            "sourceColumn": "user_id"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"MySql/localhost:3306;base_de_dados\",",
+                "    base_de_dados_profiles = Source{[Schema=\"base_de_dados\",Item=\"profiles\"]}[Data],",
+                "    #\"Colunas Removidas\" = Table.RemoveColumns(base_de_dados_profiles,{\"base_de_dados.users\"})",
+                "in",
+                "    #\"Colunas Removidas\""
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "base_de_dados roles",
+        "columns": [
+          {
+            "name": "id",
+            "dataType": "int64",
+            "sourceColumn": "id"
+          },
+          {
+            "name": "name",
+            "dataType": "string",
+            "sourceColumn": "name"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"MySql/localhost:3306;base_de_dados\",",
+                "    base_de_dados_roles = Source{[Schema=\"base_de_dados\",Item=\"roles\"]}[Data]",
+                "in",
+                "    base_de_dados_roles"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "base_de_dados users",
+        "columns": [
+          {
+            "name": "id",
+            "dataType": "int64",
+            "sourceColumn": "id"
+          },
+          {
+            "name": "first_name",
+            "dataType": "string",
+            "sourceColumn": "first_name"
+          },
+          {
+            "name": "last_name",
+            "dataType": "string",
+            "sourceColumn": "last_name"
+          },
+          {
+            "name": "email",
+            "dataType": "string",
+            "sourceColumn": "email"
+          },
+          {
+            "name": "password_hash",
+            "dataType": "string",
+            "sourceColumn": "password_hash"
+          },
+          {
+            "name": "salary",
+            "dataType": "double",
+            "sourceColumn": "salary"
+          },
+          {
+            "name": "created_at",
+            "dataType": "dateTime",
+            "sourceColumn": "created_at"
+          },
+          {
+            "name": "updated_at",
+            "dataType": "dateTime",
+            "sourceColumn": "updated_at"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"MySql/localhost:3306;base_de_dados\",",
+                "    base_de_dados_users = Source{[Schema=\"base_de_dados\",Item=\"users\"]}[Data]",
+                "in",
+                "    base_de_dados_users"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "base_de_dados users_roles",
+        "columns": [
+          {
+            "name": "user_id",
+            "dataType": "int64",
+            "sourceColumn": "user_id"
+          },
+          {
+            "name": "role_id",
+            "dataType": "int64",
+            "sourceColumn": "role_id"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #\"MySql/localhost:3306;base_de_dados\",",
+                "    base_de_dados_users_roles = Source{[Schema=\"base_de_dados\",Item=\"users_roles\"]}[Data]",
+                "in",
+                "    base_de_dados_users_roles"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "879326b8-c711-49bc-9786-faff2c20007a",
+        "fromTable": "base_de_dados profiles",
+        "fromColumn": "user_id",
+        "toTable": "base_de_dados users",
+        "toColumn": "id"
+      },
+      {
+        "name": "b8269f47-43ac-45c7-8af6-85072c2455c8",
+        "fromTable": "base_de_dados users_roles",
+        "fromColumn": "role_id",
+        "toTable": "base_de_dados roles",
+        "toColumn": "id"
+      },
+      {
+        "name": "d03a6293-a651-46fd-bd0c-1191d28545bf",
+        "fromTable": "base_de_dados users_roles",
+        "fromColumn": "user_id",
+        "toTable": "base_de_dados users",
+        "toColumn": "id"
+      }
+    ],
+    "perspectives": [
+      {
+        "name": "Adminstrador",
+        "tables": [
+          {
+            "name": "base_de_dados first_name",
+            "columns": [
+              {
+                "name": "first_name"
+              },
+              {
+                "name": "id"
+              }
+            ]
+          },
+          {
+            "name": "base_de_dados profiles",
+            "columns": [
+              {
+                "name": "bio"
+              },
+              {
+                "name": "description"
+              },
+              {
+                "name": "id"
+              },
+              {
+                "name": "user_id"
+              }
+            ]
+          },
+          {
+            "name": "base_de_dados roles",
+            "columns": [
+              {
+                "name": "id"
+              },
+              {
+                "name": "name"
+              }
+            ]
+          },
+          {
+            "name": "base_de_dados users",
+            "columns": [
+              {
+                "name": "created_at"
+              },
+              {
+                "name": "email"
+              },
+              {
+                "name": "first_name"
+              },
+              {
+                "name": "id"
+              },
+              {
+                "name": "last_name"
+              },
+              {
+                "name": "password_hash"
+              },
+              {
+                "name": "salary"
+              },
+              {
+                "name": "updated_at"
+              }
+            ]
+          },
+          {
+            "name": "base_de_dados users_roles",
+            "columns": [
+              {
+                "name": "role_id"
+              },
+              {
+                "name": "user_id"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Analista",
+        "tables": [
+          {
+            "name": "base_de_dados first_name",
+            "columns": [
+              {
+                "name": "first_name"
+              }
+            ]
+          },
+          {
+            "name": "base_de_dados profiles",
+            "columns": [
+              {
+                "name": "bio"
+              },
+              {
+                "name": "description"
+              },
+              {
+                "name": "user_id"
+              }
+            ]
+          },
+          {
+            "name": "base_de_dados roles",
+            "columns": [
+              {
+                "name": "name"
+              }
+            ]
+          },
+          {
+            "name": "base_de_dados users",
+            "columns": [
+              {
+                "name": "created_at"
+              },
+              {
+                "name": "email"
+              },
+              {
+                "name": "first_name"
+              },
+              {
+                "name": "last_name"
+              },
+              {
+                "name": "updated_at"
+              }
+            ]
+          },
+          {
+            "name": "base_de_dados users_roles",
+            "columns": [
+              {
+                "name": "role_id"
+              },
+              {
+                "name": "user_id"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "roles": [
+      {
+        "name": "Administrador",
+        "modelPermission": "administrator",
+        "members": [
+          {
+            "memberName": "analy",
+            "memberId": "S-1-5-21-3725406564-473890137-2940250139-1001"
+          }
+        ]
+      },
+      {
+        "name": "Analista",
+        "modelPermission": "readRefresh",
+        "members": [
+          {
+            "memberName": "elmesson@outlook.com",
+            "memberId": "elmesson@outlook.com",
+            "identityProvider": "AzureAD"
+          }
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "600"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}
