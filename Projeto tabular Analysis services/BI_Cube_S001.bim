@@ -245,6 +245,15 @@
         "fromColumn": "user_id",
         "toTable": "base_de_dados users",
         "toColumn": "id"
+      },
+      {
+        "name": "2cacf61d-2725-47f0-917b-c594779e6c9c",
+        "fromCardinality": "one",
+        "fromTable": "base_de_dados first_name",
+        "fromColumn": "id",
+        "toTable": "base_de_dados users",
+        "toColumn": "id",
+        "crossFilteringBehavior": "bothDirections"
       }
     ],
     "perspectives": [
