@@ -190,6 +190,12 @@
               ]
             }
           }
+        ],
+        "measures": [
+          {
+            "name": "Salario Bruto",
+            "expression": " SUM('base_de_dados users'[salary])"
+          }
         ]
       },
       {
@@ -325,6 +331,11 @@
               },
               {
                 "name": "updated_at"
+              }
+            ],
+            "measures": [
+              {
+                "name": "Salario Bruto"
               }
             ]
           },
